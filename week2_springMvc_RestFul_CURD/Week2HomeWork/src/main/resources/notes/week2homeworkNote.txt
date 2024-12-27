@@ -1,0 +1,36 @@
+Department REST APIs:
+
+- id
+
+- title				 GET: /departments
+
+- isActive 		POST: /departments
+
+- createdAt		 PUT: /departments
+			DELETE: /departments
+			GET: /departments/{id}
+
+
+3. Write Exception Handling logic for the Department Entity.
+
+4. Add the appropriate fields in the Department and Employee Entities
+so that the following validations can be added:
+
+@Null, @NotNull, @AssertTrue, @AssertFalse, @Min, @Max, @DecimalMin,
+@DecimalMax, @Negative, @NegativeOrZero, @Positive, @PositiveOrZero,
+@Size, @Digits, @Past, @PastOrPresent, @Future, @FutureOrPresent,
+@Pattern, @Email, @NotEmpty, @NotBlank, @Length, @Range,
+@CreditCardNumber, @URL
+
+
+5. Create custom Annotation to handle a Prime number input
+6. Create custom Annotation to check if the Password String field
+satisfies the following criteria:
+
+a. contains one uppercase letter
+
+b. contains one lowercase letter
+
+c. contains one special character
+
+d. minimum length is 10 characters
