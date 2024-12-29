@@ -42,7 +42,7 @@ public class Product {
     @Column(name = "tittle_x")
     private String tittle;
 
-
+    @Column(precision = 6,scale = 2)
     private BigDecimal price;
 
     private Integer quantity;
