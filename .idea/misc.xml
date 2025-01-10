@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ExternalStorageConfigurationManager" enabled="true" />
+  <component name="MavenProjectsManager">
+    <option name="originalFiles">
+      <list>
+        <option value="$PROJECT_DIR$/week1_IntroOfSpringBoot/IntroSpringBoot/pom.xml" />
+        <option value="$PROJECT_DIR$/week1_IntroOfSpringBoot/CakeBakery_assignment/pom.xml" />
+        <option value="$PROJECT_DIR$/week2_springMvc_RestFul_CURD/Week2HomeWork/pom.xml" />
+        <option value="$PROJECT_DIR$/week2_springMvc_RestFul_CURD/SpringRestCrud/pom.xml" />
+        <option value="$PROJECT_DIR$/week3_Hibernate_spring_DataJpa/JPA_Detailed/pom.xml" />
+        <option value="$PROJECT_DIR$/week3_Hibernate_spring_DataJpa/week3_assignment/pom.xml" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_23" default="true" project-jdk-name="openjdk-23" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/out" />
+  </component>
+</project>
