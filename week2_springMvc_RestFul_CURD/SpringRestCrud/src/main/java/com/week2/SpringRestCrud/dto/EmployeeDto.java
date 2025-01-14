@@ -48,7 +48,7 @@ public class EmployeeDto {
     private Double salary;
 
     @PastOrPresent(message = "date of joining of employee should be past or present date not in future")
-    @JsonFormat(pattern = "dd-MM-yyyy")
+//    @JsonFormat(pattern = "dd-MM-yyyy")
     private LocalDate dateOfJoining;
 
     @AssertTrue(message = "employee should be active only needed")

@@ -2,6 +2,7 @@ package com.week4.productReadyFeatures.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.envers.Audited;
 
 @Entity
 @Table(name = "posts")
@@ -9,8 +10,8 @@ import lombok.*;
 @NoArgsConstructor
 @Getter
 @Setter
-//@Audited
-public class PostEntity{
+@Audited
+public class PostEntity extends AuditableEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,19 +20,17 @@ public class PostEntity{
     private String description;
 
     @PrePersist
-    void beforeSave() {
+    void beforeSave(){
 
     }
 
     @PreUpdate
-    void beforeUpdate() {
+    void beforeUpdate(){
 
     }
 
     @PreRemove
-    void beforeDelete() {
+    void beforeDelete(){
 
     }
-
-
 }
