@@ -13,7 +13,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @Configuration
 public class RestClientConfig {
 
-    @Value("currency.base.url")
+    @Value("${currency.base.url}")
     private String BASE_URL;
 
     @Bean

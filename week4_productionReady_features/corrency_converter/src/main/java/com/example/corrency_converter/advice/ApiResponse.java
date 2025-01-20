@@ -13,7 +13,7 @@ public class ApiResponse<T> {
 
     ApiResponse(){ this.timeStamp = LocalDateTime.now();}
 
-    ApiResponse(T data){this(); this.data= data;}
+    public ApiResponse(T data){this(); this.data= data;}
 
     ApiResponse(ApiError error){ this(); this.error = error;}
 }

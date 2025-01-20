@@ -6,8 +6,11 @@ import com.example.corrency_converter.entities.CurrencyData;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+import java.util.List;
+
+@RestController
 public class CurrencyConverterController {
 
     private final CurrencyClient currencyClient;
@@ -17,7 +20,7 @@ public class CurrencyConverterController {
     }
 
     @GetMapping(path = "/convertCurrency")
-    public ApiResponse<CurrencyData> getAllCurrencies(@RequestParam String fromCurrency, @RequestParam String toCurrency , @RequestParam Double units){
+    public ApiResponse<CurrencyData> getAllCurrencies(@RequestParam String fromCurrency, @RequestParam List<String> toCurrency , @RequestParam Double units){
         return currencyClient.getAllCurrency(fromCurrency , toCurrency , units);
     }
 
