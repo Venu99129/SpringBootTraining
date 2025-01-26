@@ -1,5 +1,6 @@
 package com.example.spring_securities_1.services;
 
+import com.example.spring_securities_1.dto.SignupDto;
 import com.example.spring_securities_1.dto.UserDto;
 import com.example.spring_securities_1.entities.User;
 import com.example.spring_securities_1.exceptions.ResourceNotFoundException;
@@ -30,17 +31,21 @@ public class UserService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
         return userRepository.findByEmail(username)
-                .orElseThrow(()-> new ResourceNotFoundException("user with email: "+username+" is not found"));
+                .orElseThrow(()-> new BadCredentialsException("user with email: "+username+" is not found"));
     }
 
-    public UserDto createNewUser(UserDto userDto) {
+    public User loadByUserId(Long userId){
+        return userRepository.findById(userId).orElseThrow(()-> new ResourceNotFoundException("user with id: "+userId+" is not found"));
+    }
 
-        Optional<User> user = userRepository.findByEmail(userDto.getEmail());
+    public UserDto signupUser(SignupDto signupDto) {
+
+        Optional<User> user = userRepository.findByEmail(signupDto.getEmail());
 
         if(user.isPresent())
-            throw new BadCredentialsException("user already exists with this email :"+userDto.getEmail());
+            throw new BadCredentialsException("user already exists with this email :"+signupDto.getEmail());
 
-        User toCreatedUser = modelMapper.map(userDto,User.class);
+        User toCreatedUser = modelMapper.map(signupDto,User.class);
         toCreatedUser.setPassword(passwordEncoder.encode(toCreatedUser.getPassword()));
 
         User savedUser = userRepository.save(toCreatedUser);

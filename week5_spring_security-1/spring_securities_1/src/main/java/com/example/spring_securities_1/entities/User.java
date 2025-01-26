@@ -12,6 +12,7 @@ import java.util.List;
 @Getter
 @Setter
 @Builder
+@ToString
 @RequiredArgsConstructor
 @AllArgsConstructor
 @Table(name = "users")

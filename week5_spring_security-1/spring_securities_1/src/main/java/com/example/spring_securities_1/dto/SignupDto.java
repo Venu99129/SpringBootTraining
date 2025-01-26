@@ -4,11 +4,11 @@ import jakarta.validation.constraints.Email;
 import lombok.Data;
 
 @Data
-public class UserDto {
-
+public class SignupDto {
     @Email
     private String email;
 
     private String name;
 
+    private String password;
 }

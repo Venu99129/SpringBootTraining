@@ -1,14 +1,12 @@
-package com.example.spring_securities_1.dto;
+package com.example.spring_securities_1.entities;
 
 import jakarta.validation.constraints.Email;
 import lombok.Data;
 
 @Data
-public class UserDto {
+public class LoginDto {
 
     @Email
     private String email;
-
-    private String name;
-
+    private String password;
 }

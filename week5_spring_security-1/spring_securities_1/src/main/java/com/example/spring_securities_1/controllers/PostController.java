@@ -3,6 +3,7 @@ package com.example.spring_securities_1.controllers;
 import com.example.spring_securities_1.dto.PostDTO;
 import com.example.spring_securities_1.services.PostService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.List;
 @RestController
 @RequestMapping(path = "/posts")
 @RequiredArgsConstructor
+@Slf4j
 public class PostController {
 
     private final PostService postService;
@@ -21,6 +23,7 @@ public class PostController {
 
     @GetMapping("/{postId}")
     public PostDTO getPostById(@PathVariable Long postId) {
+        log.info("fetching posts details by using getPostById  postId: {}",postId);
         return postService.getPostById(postId);
     }
 
