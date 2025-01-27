@@ -1,44 +1,45 @@
-package com.example.spring_securities_1.services;
+package com.example.spring_security_assignment.repositories;
 
-import com.example.spring_securities_1.entities.User;
+import com.example.spring_security_assignment.entities.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.token.Token;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
-import java.util.Set;
 
 @Service
+@RequiredArgsConstructor
 public class JwtService {
 
-    @Value("${jwt.secretKey}")
-    private String JwtSecretKey;
+    @Value("${spring.secretKey}")
+    private String secretKey;
 
-    private SecretKey getSecretKey(){
-        return Keys.hmacShaKeyFor(JwtSecretKey.getBytes(StandardCharsets.UTF_8));
+    private SecretKey getToken(){
+        return Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
     }
 
     public String generateToken(User user){
         return Jwts.builder()
                 .subject(user.getId().toString())
-                .claim("email",user.getEmail())
-                .claim("roles", Set.of("ADMIN","USER"))
                 .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() + 1000*60))
-                .signWith(getSecretKey())
+                .expiration(new Date(System.currentTimeMillis()+1000*60))
+                .signWith(getToken())
                 .compact();
     }
 
     public Long getUserIdFromToken(String token){
         Claims claims = Jwts.parser()
-                .verifyWith(getSecretKey())
+                .verifyWith(getToken())
                 .build()
                 .parseSignedClaims(token)
                 .getPayload();
+
         return Long.valueOf(claims.getSubject());
     }
 }

@@ -1,4 +1,4 @@
-package com.example.spring_securities_1.entities;
+package com.example.spring_securities_1.dto;
 
 import jakarta.validation.constraints.Email;
 import lombok.Data;
