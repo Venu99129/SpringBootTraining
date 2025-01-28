@@ -1,10 +1,15 @@
 package com.example.spring_security_assignment.advices;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
 import java.time.LocalDateTime;
 
 @Data
+@Builder
+@AllArgsConstructor
+
 public class ApiError {
 
     private LocalDateTime timeStamp;

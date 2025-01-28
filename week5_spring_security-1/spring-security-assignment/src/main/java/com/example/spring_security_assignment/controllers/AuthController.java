@@ -3,7 +3,6 @@ package com.example.spring_security_assignment.controllers;
 import com.example.spring_security_assignment.dto.LoginDto;
 import com.example.spring_security_assignment.dto.SignUpDto;
 import com.example.spring_security_assignment.dto.UserDto;
-import com.example.spring_security_assignment.repositories.JwtService;
 import com.example.spring_security_assignment.services.AuthService;
 import com.example.spring_security_assignment.services.UserService;
 import lombok.RequiredArgsConstructor;

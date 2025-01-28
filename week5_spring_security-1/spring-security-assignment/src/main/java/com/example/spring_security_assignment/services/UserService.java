@@ -3,6 +3,7 @@ package com.example.spring_security_assignment.services;
 import com.example.spring_security_assignment.dto.SignUpDto;
 import com.example.spring_security_assignment.dto.UserDto;
 import com.example.spring_security_assignment.entities.User;
+import com.example.spring_security_assignment.exceptions.ResourceNotFoundException;
 import com.example.spring_security_assignment.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,5 +35,10 @@ public class UserService implements UserDetailsService {
         User toSavedUser = modelMapper.map(signUpDto , User.class);
         toSavedUser.setPassword(passwordEncoder.encode(toSavedUser.getPassword()));
         return modelMapper.map(userRepository.save(toSavedUser),UserDto.class);
+    }
+
+    public User loadUserByUserId(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(()-> new ResourceNotFoundException("user not found with given userId :"+userId));
     }
 }
