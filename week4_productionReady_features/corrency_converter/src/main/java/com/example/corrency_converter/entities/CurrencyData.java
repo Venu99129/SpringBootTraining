@@ -1,11 +1,12 @@
 package com.example.corrency_converter.entities;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Data;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
-@lombok.Data
+@Data
 @Component
 public class CurrencyData {
 

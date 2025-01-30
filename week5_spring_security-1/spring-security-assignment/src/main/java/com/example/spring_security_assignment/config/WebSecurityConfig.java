@@ -22,7 +22,7 @@ public class WebSecurityConfig {
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity.authorizeHttpRequests(auth ->
-            auth.requestMatchers("/auth/login","/auth/signup").permitAll()
+            auth.requestMatchers("/auth/**","/swagger-ui.html","/swagger-ui/index.html","/v3/api-docs").permitAll()
                     .anyRequest().authenticated()
         ).csrf(csrf-> csrf.disable())
         .sessionManagement(sesion -> sesion.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

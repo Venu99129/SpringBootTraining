@@ -8,11 +8,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.client.RestClient;
 
 import java.lang.reflect.Type;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -40,8 +38,6 @@ public class CurrencyClientImpl implements CurrencyClient {
             }
         }
 
-
-
         StringBuilder toCurrencyBuilder = new StringBuilder();
         for(int i = 0; i< toCurrency.size(); i++){
             if(i==0) toCurrencyBuilder = new StringBuilder(toCurrency.get(i));
@@ -58,7 +54,6 @@ public class CurrencyClientImpl implements CurrencyClient {
                 .body(new ParameterizedTypeReference<CurrencyData>() {
                 });
         log.debug("successfully we fetched data from currency convert api");
-        assert currencyData != null;
         log.trace("retrieved all currency daya from currency api :{}",currencyData.getCurrencyValues());
         ApiResponse<CurrencyData> currencyDataApiResponse = new ApiResponse<>(currencyData);
         Map<String , Double> actualData = currencyDataApiResponse.getData().getCurrencyValues();

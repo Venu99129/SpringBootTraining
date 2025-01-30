@@ -1,6 +1,7 @@
 package com.example.spring_security_assignment.services;
 
 import com.example.spring_security_assignment.dto.LoginDto;
+import com.example.spring_security_assignment.dto.LoginResponseDto;
 import com.example.spring_security_assignment.entities.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,9 +18,9 @@ public class AuthService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
    // private final RedisService redisService;
-    private final SessionService sessionService;
+    private final UserService userService;
 
-    public String login(LoginDto loginDto){
+    public LoginResponseDto login(LoginDto loginDto){
         log.info("login method called");
 
         Authentication authentication = authenticationManager.authenticate(
@@ -28,13 +29,25 @@ public class AuthService {
 
         User user = (User) authentication.getPrincipal();
 
-        String token = jwtService.generateToken(user);
+        String accessToken = jwtService.generateAccessToken(user);
+        String refreshToken = jwtService.generateRefreshToken(user);
 
-        log.debug("Generated token: {}", token);
+        log.debug("Generated token: {}", accessToken);
+        log.debug("generated refresh token :{}",refreshToken);
         //redisService.setValue(user.getId(), token);
 
-        sessionService.createSession(user.getId(),token);
 //        log.info("token generated ");
-        return token;
+        return new LoginResponseDto(user.getId(), accessToken,refreshToken);
+    }
+
+    public LoginResponseDto refreshToken(String refreshToken) {
+
+        Long userId = jwtService.getUserIdFromToken(refreshToken);
+
+        User user = userService.loadUserByUserId(userId);
+
+        String accessToken = jwtService.generateAccessToken(user);
+
+        return new LoginResponseDto(userId,accessToken,refreshToken);
     }
 }
