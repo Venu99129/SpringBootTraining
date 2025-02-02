@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome Home</title>
+    <style>
+        /* Global Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f7fc;
+            color: #333;
+        }
+
+        header {
+            background-color: #4CAF50;
+            padding: 10px 0;
+            text-align: center;
+            color: white;
+        }
+
+        header nav ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        header nav ul li {
+            display: inline;
+            margin: 0 20px;
+        }
+
+        header nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        header nav ul li a:hover {
+            text-decoration: underline;
+        }
+
+        main {
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 28px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        p {
+            font-size: 18px;
+            line-height: 1.6;
+        }
+
+        #user-info {
+            margin-top: 30px;
+            padding: 15px;
+            background-color: #e9f7e9;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+        }
+
+        #user-info img {
+            border-radius: 50%;
+            width: 80px;
+            height: 80px;
+            margin-right: 20px;
+        }
+
+        #user-info p {
+            margin: 5px 0;
+        }
+
+        footer {
+            text-align: center;
+            background-color: #333;
+            color: white;
+            padding: 10px;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+        }
+
+        .logout-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #f44336;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 16px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .logout-btn:hover {
+            background-color: #d32f2f;
+        }
+
+    </style>
+</head>
+<body>
+<header>
+    <nav>
+        <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Profile</a></li>
+            <li><a href="#">Settings</a></li>
+            <li><a href="#" id="logout">Logout</a></li>
+        </ul>
+    </nav>
+</header>
+
+<main>
+    <h1>Welcome to Your Dashboard</h1>
+    <p>You're logged in successfully with your Google account.</p>
+
+    <div id="user-info">
+        <img id="user-profile-pic" src="" alt="Profile Picture">
+        <div>
+            <p><strong>Name:</strong> <span id="user-name">Venu madhav</span></p>
+            <p><strong>Email:</strong> <span id="user-email">venumadhavtammaala@gmail.com</span></p>
+        </div>
+    </div>
+
+    <p>Enjoy exploring our website!</p>
+    <a href="#" class="logout-btn" id="logout-btn">Logout</a>
+</main>
+
+<footer>
+    <p>&copy; 2025 Your Website Name</p>
+</footer>
+
+<script>
+    // Example user data after successful Google OAuth login
+    const userName = 'John Doe';
+    const userEmail = 'johndoe@example.com';
+    const userProfilePic = 'https://example.com/profile-pic.jpg';  // Example image URL
+
+    // Dynamically set user info
+    document.getElementById('user-name').textContent = userName;
+    document.getElementById('user-email').textContent = userEmail;
+    document.getElementById('user-profile-pic').src = userProfilePic;
+
+    // Logout functionality
+    document.getElementById('logout-btn').addEventListener('click', function() {
+        alert('Logging out...');
+        // Redirect to a logout endpoint or perform logout logic here
+        window.location.href = '/logout';
+    });
+</script>
+</body>
+</html>

@@ -1,5 +1,6 @@
 package com.example.spring_securities_1;
 
+import com.example.spring_securities_1.dto.LoginResponseDto;
 import com.example.spring_securities_1.entities.User;
 import com.example.spring_securities_1.services.JwtService;
 import org.junit.jupiter.api.Test;
@@ -17,7 +18,7 @@ class SpringSecurities1ApplicationTests {
 	void contextLoads() {
 		User user = new User(5L,"venumadhav@gmail.com" ,"venu" ,"venu123" );
 
-		String token = jwtService.generateToken(user);
+		String token = jwtService.generateAccessToken(user);
 
 		System.out.println(token);
 

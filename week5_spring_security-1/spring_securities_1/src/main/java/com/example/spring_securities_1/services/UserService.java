@@ -51,4 +51,17 @@ public class UserService implements UserDetailsService {
         User savedUser = userRepository.save(toCreatedUser);
         return modelMapper.map(savedUser , UserDto.class);
     }
+
+    public User getByEmail(String email){
+        return userRepository.findByEmail(email).orElse(null);
+    }
+
+    public User loadUserByUserId(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(()-> new ResourceNotFoundException("user not found with given userId :"+userId));
+    }
+
+    public User save(User user){
+        return userRepository.save(user);
+    }
 }

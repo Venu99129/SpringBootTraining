@@ -2,6 +2,7 @@ package com.example.spring_securities_1.filters;
 
 import com.example.spring_securities_1.entities.User;
 import com.example.spring_securities_1.services.JwtService;
+import com.example.spring_securities_1.services.SessionService;
 import com.example.spring_securities_1.services.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

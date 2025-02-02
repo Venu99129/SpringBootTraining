@@ -53,12 +53,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
            // redisService.isValidToken(userId,token);
             sessionService.isValidSession(userId,token);
-//            if(){
-//                filterChain.doFilter(request, response);
-//                SecurityContextHolder.getContext().setAuthentication(null);
-//                return;
-//            }
-
+            
             if (userId != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 User user = userService.loadUserByUserId(userId);
 

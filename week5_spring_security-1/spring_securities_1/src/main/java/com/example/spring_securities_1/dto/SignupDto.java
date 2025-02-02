@@ -1,7 +1,10 @@
 package com.example.spring_securities_1.dto;
 
+import com.example.spring_securities_1.entities.enums.Role;
 import jakarta.validation.constraints.Email;
 import lombok.Data;
+
+import java.util.Set;
 
 @Data
 public class SignupDto {
@@ -11,4 +14,6 @@ public class SignupDto {
     private String name;
 
     private String password;
+
+    private Set<Role> roles;
 }

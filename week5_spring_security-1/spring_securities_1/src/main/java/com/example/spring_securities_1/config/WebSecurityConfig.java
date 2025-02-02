@@ -1,9 +1,12 @@
 package com.example.spring_securities_1.config;
 
 import com.example.spring_securities_1.filters.JwtAuthFilter;
+import com.example.spring_securities_1.handlers.OAuthSuccessHandler;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -19,26 +22,47 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import static com.example.spring_securities_1.entities.enums.Role.ADMIN;
+import static com.example.spring_securities_1.entities.enums.Role.CREATOR;
+
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class WebSecurityConfig {
 
     private final JwtAuthFilter jwtAuthFilter;
+    private final OAuthSuccessHandler authSuccessHandler;
+
+    private static final String[] publicRoutes = {
+            "/auth/**", "/home.html"
+    };
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
                 .authorizeHttpRequests(auth ->
                         auth
-                                .requestMatchers("/auth/**", "/posts").permitAll()  // Ensure /auth/signup is explicitly permitted
+                                .requestMatchers(publicRoutes).permitAll()
+                                .requestMatchers(HttpMethod.GET,"/posts/**").permitAll()
+                                .requestMatchers(HttpMethod.POST,"/posts/**").hasAnyRole(ADMIN.name(),CREATOR.name())
+                                // Ensure /auth/signup is explicitly permitted
 //                                .requestMatchers("/posts/**").hasAnyRole("ADMIN")  // Restrict /posts/** to ADMIN role
                                 .anyRequest().authenticated()  // Require authentication for any other request
                 )
+                .exceptionHandling(exceptions ->
+                        exceptions
+                                .accessDeniedHandler(((request, response, accessDeniedException) -> {
+                                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                                        response.getWriter().write("Access Denied: Insufficient Role");
+                                })))
                 .csrf(csrf -> csrf.disable())  // Disabling CSRF
                 .sessionManagement(sessionConfig -> sessionConfig
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))  // Stateless session management
                 .addFilterBefore(jwtAuthFilter , UsernamePasswordAuthenticationFilter.class)
+                .oauth2Login(oauth2Config-> oauth2Config
+                        .failureUrl("/login?error=true")
+                        .successHandler(authSuccessHandler)
+                )
                 .build();
     }
 //

@@ -1,5 +1,6 @@
 package com.example.spring_securities_1.advice;
 
+import com.example.spring_securities_1.exceptions.MultipleUserLoginException;
 import com.example.spring_securities_1.exceptions.ResourceNotFoundException;
 import io.jsonwebtoken.JwtException;
 import org.springframework.http.HttpStatus;
@@ -27,6 +28,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(JwtException.class)
     public ResponseEntity<ApiError> handleJwtException(JwtException exception){
         ApiError error = new ApiError(exception.getMessage(),HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(error,HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(MultipleUserLoginException.class)
+    public ResponseEntity<ApiError> handleMultipleUserLoginException(MultipleUserLoginException exception){
+        ApiError error = new ApiError(exception.getMessage(), HttpStatus.UNAUTHORIZED);
         return new ResponseEntity<>(error,HttpStatus.UNAUTHORIZED);
     }
 
