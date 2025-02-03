@@ -1,5 +1,6 @@
 package com.example.spring_securities_1.dto;
 
+import com.example.spring_securities_1.entities.enums.Permission;
 import com.example.spring_securities_1.entities.enums.Role;
 import jakarta.validation.constraints.Email;
 import lombok.Data;

@@ -5,7 +5,7 @@ import com.example.spring_securities_1.exceptions.ResourceNotFoundException;
 import io.jsonwebtoken.JwtException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -35,6 +35,12 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiError> handleMultipleUserLoginException(MultipleUserLoginException exception){
         ApiError error = new ApiError(exception.getMessage(), HttpStatus.UNAUTHORIZED);
         return new ResponseEntity<>(error,HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ApiError> handleAccessDeniedException(AccessDeniedException exception){
+        ApiError error = new ApiError(exception.getMessage(), HttpStatus.FORBIDDEN);
+        return new ResponseEntity<>(error,HttpStatus.FORBIDDEN);
     }
 
 }

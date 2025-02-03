@@ -4,6 +4,7 @@ import com.example.spring_securities_1.dto.PostDTO;
 import com.example.spring_securities_1.services.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,6 +17,7 @@ public class PostController {
 
     private final PostService postService;
 
+    @Secured({"ROLE_USER","ROLE_ADMIN"})
     @GetMapping
     public List<PostDTO> getAllPosts() {
         return postService.getAllPosts();
