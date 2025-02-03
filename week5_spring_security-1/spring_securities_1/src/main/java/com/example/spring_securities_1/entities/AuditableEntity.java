@@ -34,4 +34,12 @@ public class AuditableEntity {
     @LastModifiedBy
     private String updatedBy;
 
+    public Long getCreatedByAsLong(){
+        return Long.parseLong(createdBy);
+    }
+
+    public Long getUpdatedByAsLong(){
+        return Long.parseLong(updatedBy);
+    }
+
 }

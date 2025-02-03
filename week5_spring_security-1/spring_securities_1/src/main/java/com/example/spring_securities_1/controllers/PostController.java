@@ -5,6 +5,7 @@ import com.example.spring_securities_1.services.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,6 +25,7 @@ public class PostController {
     }
 
     @GetMapping("/{postId}")
+    @PreAuthorize("hasAnyRole('USER','ADMIN') OR hasAnyAuthority('POST_VIEW')")
     public PostDTO getPostById(@PathVariable Long postId) {
         log.info("fetching posts details by using getPostById  postId: {}",postId);
         return postService.getPostById(postId);
@@ -35,7 +37,9 @@ public class PostController {
     }
 
     @PutMapping("{postId}")
+    @PreAuthorize("@postSecurityService.isOwnerOfPost(#postId)")
     public PostDTO updatePost(@RequestBody PostDTO inputPost,@PathVariable Long postId ) {
+        log.info("update post postDto :{} , post id : {}",inputPost , postId);
         return postService.updatePost(inputPost, postId);
     }
 

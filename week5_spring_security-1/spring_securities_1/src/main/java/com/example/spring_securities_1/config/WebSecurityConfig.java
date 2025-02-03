@@ -57,12 +57,12 @@ public class WebSecurityConfig {
 //                                .requestMatchers("/posts/**").hasAnyRole("ADMIN")  // Restrict /posts/** to ADMIN role
                                 .anyRequest().authenticated()  // Require authentication for any other request
                 )
-//                .exceptionHandling(exceptions ->
-//                        exceptions
-//                                .accessDeniedHandler(((request, response, accessDeniedException) -> {
-//                                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-//                                        response.getWriter().write("Access Denied: Insufficient Role");
-//                                })))
+                .exceptionHandling(exceptions ->
+                        exceptions
+                                .accessDeniedHandler(((request, response, accessDeniedException) -> {
+                                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                                        response.getWriter().write("Access Denied: Insufficient Role");
+                                })))
 
                 .csrf(csrf -> csrf.disable())  // Disabling CSRF
                 .sessionManagement(sessionConfig -> sessionConfig
