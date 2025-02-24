@@ -1,25 +1,23 @@
 package com.week2.SpringRestCrud.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.week2.SpringRestCrud.annotations.DateValidation;
 import com.week2.SpringRestCrud.annotations.EmployeeRoleValidation;
 import com.week2.SpringRestCrud.utils.IntegerValidatorDeserializer;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
+@Builder
 public class EmployeeDto {
 
-    private  Long Id;
+    private  Long id;
 
     @NotBlank(message ="name of the employee cannot be null or blank")
     @Size(min = 4 , max = 10 , message = "number of character name should be range of [4 ,10]")

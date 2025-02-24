@@ -1,5 +1,6 @@
 package com.week2.SpringRestCrud.repositorys;
 
+import com.week2.SpringRestCrud.TestContainerConfiguration;
 import com.week2.SpringRestCrud.entities.EmployeeEntity;
 import static org.assertj.core.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
@@ -8,13 +9,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 
 import java.time.LocalDate;
 import java.util.List;
 
 
 //@SpringBootTest
-//@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.ANY)
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@Import(TestContainerConfiguration.class)
 @DataJpaTest
 class EmployeeRepositoryTest {
 
@@ -26,7 +29,7 @@ class EmployeeRepositoryTest {
     @BeforeEach
     void setup(){
         employee = EmployeeEntity.builder()
-                .Id(1L)
+                .id(1L)
                 .age(25)
                 .name("venu")
                 .email("venumadhav@gmail.com")

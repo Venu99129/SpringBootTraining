@@ -38,6 +38,7 @@ public class EmployeeService {
 
     public EmployeeDto saveEmployee(EmployeeDto employeeDto){
         EmployeeEntity mappedEmployeeEntity = modelMapper.map(employeeDto,EmployeeEntity.class);
+        isExistingByEmail(mappedEmployeeEntity.getEmail());
         EmployeeEntity savedEmployeeEntity = employeeRepository.save(mappedEmployeeEntity);
         return modelMapper.map(savedEmployeeEntity, EmployeeDto.class);
     }
@@ -45,6 +46,13 @@ public class EmployeeService {
     public void isExistsByEmployeeId(Long id){
        boolean exists = employeeRepository.existsById(id);
        if(!exists) throw new ResourceNotFoundException("no such employee fount with id :"+id);
+    }
+
+    public void isExistingByEmail(String email){
+        List<EmployeeEntity> employeeEntityList = employeeRepository.findByEmail(email);
+        if(!employeeEntityList.isEmpty()){
+            throw new RuntimeException("employee with this email: "+email+" all ready existed");
+        }
     }
 
     public Boolean deleteEmployee(Long id){

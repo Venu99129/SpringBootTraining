@@ -16,11 +16,11 @@ import java.time.LocalDate;
 @Table(name = "employees",
         uniqueConstraints = @UniqueConstraint(columnNames = {"email"})
 )
-public class EmployeeEntity {
+public class  EmployeeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private  Long Id;
+    private  Long id;
 
     private String name;
     private String email;
