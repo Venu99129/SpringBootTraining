@@ -16,7 +16,7 @@ public class IntegerValidatorDeserializer extends JsonDeserializer<Integer> {
             if (value.contains(".")) {
                 throw new IntegerFormatException("Given " + value + " is not a valid integer. Only integer values are accepted.");
             }
-
+            //read the commands
             // If it's not a decimal, try parsing it as an integer
             return Integer.parseInt(value);
         } catch (Exception e) {
