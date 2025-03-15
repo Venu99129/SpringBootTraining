@@ -32,7 +32,6 @@ public class EmployeeService {
 
     public Optional<EmployeeDto> findById(Long id){
         isExistsByEmployeeId(id);
-
         return employeeRepository.findById(id).map(employeeEntity -> modelMapper.map(employeeEntity, EmployeeDto.class));
     }
 

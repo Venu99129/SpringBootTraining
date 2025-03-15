@@ -1,12 +1,15 @@
 package com.week2.SpringRestCrud.services;
 
+import com.week2.SpringRestCrud.Exceptions.ResourceNotFoundException;
 import com.week2.SpringRestCrud.TestContainerConfiguration;
 import com.week2.SpringRestCrud.dto.EmployeeDto;
 import com.week2.SpringRestCrud.entities.EmployeeEntity;
 import com.week2.SpringRestCrud.repositorys.EmployeeRepository;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.*;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,8 +26,8 @@ import java.util.List;
 import java.util.Optional;
 
 
-@Import(TestContainerConfiguration.class)
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+//@Import(TestContainerConfiguration.class)
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.ANY)
 @ExtendWith(MockitoExtension.class)
 class EmployeeServiceTest {
 
@@ -76,6 +79,27 @@ class EmployeeServiceTest {
         assertThat(employeeDto.get().getEmail()).isEqualTo(mockEmployee.getEmail());
         verify(employeeRepository , atLeastOnce()).findById(id);
 
+    }
+
+    @Test
+    void testGetEmployeeById_whenEmployeeIdIsNotPresent_thenReturnResourceNotFoundException(){
+        //assign
+        when(employeeRepository.existsById(anyLong())).thenReturn(false);
+//        when(employeeRepository.findById(anyLong())).thenReturn(Optional.empty());
+
+        //assert
+        assertThatThrownBy(()-> employeeService.findById(1L))
+                .isInstanceOf(ResourceNotFoundException.class)
+                .hasMessage("no such employee fount with id :1");
+
+        verify(employeeRepository, atLeastOnce()).existsById(1L);
+
+    }
+
+    @Test
+    void testSaveEmployee_whenEmployeeEmailIsPresent_ThenReturnRunTimeException(){
+        //assign
+//        when(employeeRepository.findByEmail())
     }
 
     @Test
