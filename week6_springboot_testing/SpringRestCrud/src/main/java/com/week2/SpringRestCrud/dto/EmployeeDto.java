@@ -1,5 +1,6 @@
 package com.week2.SpringRestCrud.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.week2.SpringRestCrud.annotations.EmployeeRoleValidation;
@@ -15,6 +16,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @ToString
 @Builder
+@EqualsAndHashCode
 public class EmployeeDto {
 
     private  Long id;
@@ -46,7 +48,7 @@ public class EmployeeDto {
     private Double salary;
 
     @PastOrPresent(message = "date of joining of employee should be past or present date not in future")
-//    @JsonFormat(pattern = "dd-MM-yyyy")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateOfJoining;
 
     @AssertTrue(message = "employee should be active only needed")
