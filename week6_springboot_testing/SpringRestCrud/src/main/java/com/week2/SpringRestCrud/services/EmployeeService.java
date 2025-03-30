@@ -61,6 +61,7 @@ public class EmployeeService {
     }
 
     public EmployeeDto updateEmployee(Long employeeId, EmployeeDto employeeDto) {
+        isExistsByEmployeeId(employeeId);
         EmployeeEntity mappedEntity = modelMapper.map(employeeDto, EmployeeEntity.class);
         mappedEntity.setId(employeeId);
         EmployeeEntity updatedEmployee = employeeRepository.save(mappedEntity);
@@ -69,12 +70,12 @@ public class EmployeeService {
 
     public EmployeeDto updatePartialEmployee(Long employeeId, Map<String, Object> updates) {
        isExistsByEmployeeId(employeeId);
-        EmployeeEntity employee = employeeRepository.findById(employeeId).get();
-        updates.forEach((field,value)->{
-            Field fieldToUpdated = ReflectionUtils.findRequiredField(EmployeeEntity.class , field);
-            fieldToUpdated.setAccessible(true);
-            ReflectionUtils.setField(fieldToUpdated,employee,value);
-        });
-        return modelMapper.map(employeeRepository.save(employee) , EmployeeDto.class);
+       EmployeeEntity employee = employeeRepository.findById(employeeId).get();
+       updates.forEach((field,value)->{
+           Field fieldToUpdated = ReflectionUtils.findRequiredField(EmployeeEntity.class , field);
+           fieldToUpdated.setAccessible(true);
+           ReflectionUtils.setField(fieldToUpdated,employee,value);
+       });
+       return modelMapper.map(employeeRepository.save(employee) , EmployeeDto.class);
     }
 }

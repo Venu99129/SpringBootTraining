@@ -1,15 +1,13 @@
 package com.week2.SpringRestCrud.services;
 
 import com.week2.SpringRestCrud.Exceptions.ResourceNotFoundException;
-import com.week2.SpringRestCrud.TestContainerConfiguration;
 import com.week2.SpringRestCrud.dto.EmployeeDto;
 import com.week2.SpringRestCrud.entities.EmployeeEntity;
 import com.week2.SpringRestCrud.repositorys.EmployeeRepository;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
-
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,9 +18,10 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.context.annotation.Import;
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 
@@ -99,7 +98,11 @@ class EmployeeServiceTest {
     @Test
     void testSaveEmployee_whenEmployeeEmailIsPresent_ThenReturnRunTimeException(){
         //assign
-//        when(employeeRepository.findByEmail())
+        when(employeeRepository.findByEmail(anyString())).thenReturn(List.of(mockEmployee));
+
+        assertThatThrownBy(()-> employeeService.isExistingByEmail("venumadhav@gmail.com")
+                ).isInstanceOf(RuntimeException.class)
+                .hasMessage("employee with this email: venumadhav@gmail.com all ready existed");
     }
 
     @Test
@@ -122,4 +125,114 @@ class EmployeeServiceTest {
 
         assertThat(employeeEntity.getEmail()).isEqualTo(mockedEmployeeDto.getEmail());
     }
+
+    @Test
+    void testUpdateEmployee_WhenEmployeeIsExists_thenUpdateEmployeeDetails(){
+        //assign
+        mockedEmployeeDto.setName("ramu");
+        mockedEmployeeDto.setRole("USER");
+        EmployeeEntity employee = modelMapper.map(mockedEmployeeDto, EmployeeEntity.class);
+        when(employeeRepository.save(any(EmployeeEntity.class))).thenReturn(employee);
+        when(employeeRepository.existsById(mockedEmployeeDto.getId())).thenReturn(true);
+
+        //act
+        EmployeeDto updatedEmployee = employeeService.updateEmployee(mockedEmployeeDto.getId(),mockedEmployeeDto);
+
+        assertThat(updatedEmployee)
+                .isEqualTo(mockedEmployeeDto);
+
+        verify(employeeRepository,times(1)).save(any(EmployeeEntity.class));
+    }
+    @Test
+    void testUpdatePartialEmployee_whenEmployeeIsExistsAndFilesNotMatched_ThenReturnIllegalArgumentException(){
+        //assign
+        Map<String,Object> updatableFiles = Map.of("name","gopal","aeg",32);
+        when(employeeRepository.existsById(mockedEmployeeDto.getId())).thenReturn(true);
+        when(employeeRepository.findById(mockedEmployeeDto.getId())).thenReturn(Optional.of(mockEmployee));
+
+        //assert
+        assertThatThrownBy(()->employeeService.updatePartialEmployee(mockedEmployeeDto.getId(),updatableFiles))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Unable to find field aeg on class com.week2.SpringRestCrud.entities.EmployeeEntity");
+
+        verify(employeeRepository, times(1)).findById(anyLong());
+        verify(employeeRepository,never()).save(any(EmployeeEntity.class));
+
+    }
+
+    @Test
+    void testUpdatePartialEmployee_WhenEmployeeIsExistsAndFieldsMatched_thenUpdateEmployee(){
+        //assign
+        Map<String,Object> updatableFiles = Map.of("name","gopal","age",32);
+        when(employeeRepository.existsById(mockedEmployeeDto.getId())).thenReturn(true);
+        when(employeeRepository.findById(mockedEmployeeDto.getId())).thenReturn(Optional.of(mockEmployee));
+        mockedEmployeeDto.setName("gopal");
+        mockedEmployeeDto.setAge(32);
+        EmployeeEntity employee = modelMapper.map(mockedEmployeeDto, EmployeeEntity.class);
+        when(employeeRepository.save(any(EmployeeEntity.class))).thenReturn(employee);
+
+        //act
+        EmployeeDto updatedEmployeeDto = employeeService.updatePartialEmployee(mockedEmployeeDto.getId(),updatableFiles);
+
+        //assert
+        assertThat(mockedEmployeeDto).isEqualTo(updatedEmployeeDto);
+        verify(employeeRepository).save(any(EmployeeEntity.class));
+    }
+
+    @Test
+    void testUpdatePartialEmployee_WhenEmployeeDoesNotExist_ThenThrowException() {
+        // Arrange
+        when(employeeRepository.existsById(1L)).thenReturn(false); // Mock existsById to return false
+
+        // Act & Assert
+        assertThrows(ResourceNotFoundException.class, () -> {
+            employeeService.updatePartialEmployee(1L, new HashMap<>());
+        });
+
+        // Verify interactions
+        verify(employeeRepository, times(1)).existsById(1L);
+        verify(employeeRepository, never()).findById(anyLong());
+        verify(employeeRepository, never()).save(any(EmployeeEntity.class));
+    }
+
+    @Test
+    void testUpdatePartialEmployee_WhenInvalidField_ThenThrowException() {
+        // Arrange
+        Map<String, Object> updates = new HashMap<>();
+        updates.put("invalidField", "Invalid Value");
+
+        // Mock the behavior of existsById and findById
+        when(employeeRepository.existsById(1L)).thenReturn(true); // Ensure existsById returns true
+        when(employeeRepository.findById(1L)).thenReturn(Optional.of(mockEmployee)); // Mock findById to return the employee
+
+        // Act & Assert
+        assertThrows(IllegalArgumentException.class, () -> {
+            employeeService.updatePartialEmployee(1L, updates);
+        });
+
+        // Verify interactions
+        verify(employeeRepository, times(1)).existsById(1L);
+        verify(employeeRepository, times(1)).findById(1L);
+        verify(employeeRepository, never()).save(any(EmployeeEntity.class));
+    }
+
+    @Test
+    void testUpdatePartialEmployee_WhenReflectionUtilsThrowsException_ThenThrowException() {
+        // Arrange
+        Map<String, Object> updates = new HashMap<>();
+        updates.put("name", "Jane Doe");
+        when(employeeRepository.existsById(1L)).thenReturn(true);
+        when(employeeRepository.findById(1L)).thenReturn(Optional.of(mockEmployee));
+        doThrow(new RuntimeException("Reflection failed")).when(employeeRepository).save(any(EmployeeEntity.class));
+
+        // Act & Assert
+        assertThrows(RuntimeException.class, () -> {
+            employeeService.updatePartialEmployee(1L, updates);
+        });
+        verify(employeeRepository, times(1)).existsById(1L);
+        verify(employeeRepository, times(1)).findById(1L);
+        verify(employeeRepository, times(1)).save(any(EmployeeEntity.class));
+    }
+
+
 }
