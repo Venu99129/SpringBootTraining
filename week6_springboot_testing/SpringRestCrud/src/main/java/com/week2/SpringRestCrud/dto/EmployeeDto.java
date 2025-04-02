@@ -7,9 +7,7 @@ import com.week2.SpringRestCrud.annotations.EmployeeRoleValidation;
 import com.week2.SpringRestCrud.utils.IntegerValidatorDeserializer;
 import jakarta.validation.constraints.*;
 import lombok.*;
-
 import java.time.LocalDate;
-import java.util.Objects;
 
 @Getter
 @Setter
@@ -18,7 +16,6 @@ import java.util.Objects;
 @ToString
 @EqualsAndHashCode
 @Builder
-@EqualsAndHashCode
 public class EmployeeDto {
 
     private  Long id;
