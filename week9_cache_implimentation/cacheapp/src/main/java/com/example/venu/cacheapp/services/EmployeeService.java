@@ -6,6 +6,7 @@ import com.example.venu.cacheapp.entities.EmployeeEntity;
 import com.example.venu.cacheapp.repositorys.EmployeeRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.util.ReflectionUtils;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,7 @@ import java.util.Optional;
 public class EmployeeService {
 
     private final EmployeeRepository employeeRepository;
+    private final String CACHE_NAME = "employees";
 
     EmployeeService(EmployeeRepository employeeRepository , ModelMapper modelMapper){
         this.employeeRepository = employeeRepository;
@@ -33,7 +35,7 @@ public class EmployeeService {
         return employeeEntityList.stream().map(emp -> modelMapper.map(emp, EmployeeDto.class)).toList();
     }
 
-    @Cacheable(cacheNames = "employees" , key = "#id")
+    @Cacheable(cacheNames = CACHE_NAME , key = "#id")
     public Optional<EmployeeDto> findById(Long id){
         log.info("fetching employee with id: {}",id);
         isExistsByEmployeeId(id);
@@ -41,6 +43,7 @@ public class EmployeeService {
         return employeeRepository.findById(id).map(employeeEntity -> modelMapper.map(employeeEntity, EmployeeDto.class));
     }
 
+    @CachePut(cacheNames = CACHE_NAME , key = "#result.id")
     public EmployeeDto saveEmployee(EmployeeDto employeeDto){
         EmployeeEntity mappedEmployeeEntity = modelMapper.map(employeeDto,EmployeeEntity.class);
         isExistingByEmail(mappedEmployeeEntity.getEmail());
@@ -66,17 +69,19 @@ public class EmployeeService {
         return true;
     }
 
-    public EmployeeDto updateEmployee(Long employeeId, EmployeeDto employeeDto) {
-        isExistsByEmployeeId(employeeId);
+    @CachePut(cacheNames = CACHE_NAME , key = "#id")
+    public EmployeeDto updateEmployee(Long id, EmployeeDto employeeDto) {
+        isExistsByEmployeeId(id);
         EmployeeEntity mappedEntity = modelMapper.map(employeeDto, EmployeeEntity.class);
-        mappedEntity.setId(employeeId);
+        mappedEntity.setId(id);
         EmployeeEntity updatedEmployee = employeeRepository.save(mappedEntity);
         return modelMapper.map(updatedEmployee, EmployeeDto.class);
     }
 
-    public EmployeeDto updatePartialEmployee(Long employeeId, Map<String, Object> updates) {
-       isExistsByEmployeeId(employeeId);
-        EmployeeEntity employee = employeeRepository.findById(employeeId).get();
+    @CachePut(cacheNames = CACHE_NAME , key = "#id")
+    public EmployeeDto updatePartialEmployee(Long id, Map<String, Object> updates) {
+       isExistsByEmployeeId(id);
+        EmployeeEntity employee = employeeRepository.findById(id).get();
         updates.forEach((field,value)->{
             Field fieldToUpdated = ReflectionUtils.findRequiredField(EmployeeEntity.class , field);
             fieldToUpdated.setAccessible(true);
