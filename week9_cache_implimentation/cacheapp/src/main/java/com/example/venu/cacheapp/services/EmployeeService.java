@@ -4,12 +4,14 @@ import com.example.venu.cacheapp.Exceptions.ResourceNotFoundException;
 import com.example.venu.cacheapp.dto.EmployeeDto;
 import com.example.venu.cacheapp.entities.EmployeeEntity;
 import com.example.venu.cacheapp.repositorys.EmployeeRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.util.ReflectionUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.Field;
 import java.util.List;
@@ -18,15 +20,12 @@ import java.util.Optional;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class EmployeeService {
 
     private final EmployeeRepository employeeRepository;
     private final String CACHE_NAME = "employees";
-
-    EmployeeService(EmployeeRepository employeeRepository , ModelMapper modelMapper){
-        this.employeeRepository = employeeRepository;
-        this.modelMapper = modelMapper;
-    }
+    private final SalaryAccountService salaryAccountService;
 
     private final ModelMapper modelMapper;
 
@@ -44,10 +43,12 @@ public class EmployeeService {
     }
 
     @CachePut(cacheNames = CACHE_NAME , key = "#result.id")
+    @Transactional
     public EmployeeDto saveEmployee(EmployeeDto employeeDto){
         EmployeeEntity mappedEmployeeEntity = modelMapper.map(employeeDto,EmployeeEntity.class);
         isExistingByEmail(mappedEmployeeEntity.getEmail());
         EmployeeEntity savedEmployeeEntity = employeeRepository.save(mappedEmployeeEntity);
+        salaryAccountService.createAccount(savedEmployeeEntity);
         return modelMapper.map(savedEmployeeEntity, EmployeeDto.class);
     }
 

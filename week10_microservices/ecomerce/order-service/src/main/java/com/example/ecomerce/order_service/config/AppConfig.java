@@ -1,4 +1,4 @@
-package com.example.ecomerce.inventory_service.config;
+package com.example.ecomerce.order_service.config;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
