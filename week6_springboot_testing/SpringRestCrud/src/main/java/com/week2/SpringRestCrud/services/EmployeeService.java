@@ -9,6 +9,7 @@ import org.springframework.data.util.ReflectionUtils;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Field;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -62,6 +63,9 @@ public class EmployeeService {
 
     public EmployeeDto updateEmployee(Long employeeId, EmployeeDto employeeDto) {
         isExistsByEmployeeId(employeeId);
+        EmployeeEntity oldEmployee = employeeRepository.findById(employeeId).get();
+        if(!oldEmployee.getEmail().equals(employeeDto.getEmail()))
+            throw new RuntimeException("user not allow to update email : "+oldEmployee.getEmail()+" to "+employeeDto.getEmail());
         EmployeeEntity mappedEntity = modelMapper.map(employeeDto, EmployeeEntity.class);
         mappedEntity.setId(employeeId);
         EmployeeEntity updatedEmployee = employeeRepository.save(mappedEntity);
@@ -73,6 +77,17 @@ public class EmployeeService {
        EmployeeEntity employee = employeeRepository.findById(employeeId).get();
        updates.forEach((field,value)->{
            Field fieldToUpdated = ReflectionUtils.findRequiredField(EmployeeEntity.class , field);
+           Class<?> fieldType = fieldToUpdated.getType();
+           if (fieldType == LocalDate.class) {
+               value = LocalDate.parse((String) value); // Convert string to LocalDate
+           } else if (fieldType == Integer.class && value instanceof Number) {
+               value = ((Number) value).intValue(); // Handle Integer conversion
+           } else if (fieldType == Double.class && value instanceof Number) {
+               value = ((Number) value).doubleValue(); // Handle Double conversion
+           } else if (fieldType == Long.class && value instanceof Number) {
+               value = ((Number) value).longValue(); // Handle long conversion
+           }
+
            fieldToUpdated.setAccessible(true);
            ReflectionUtils.setField(fieldToUpdated,employee,value);
        });
