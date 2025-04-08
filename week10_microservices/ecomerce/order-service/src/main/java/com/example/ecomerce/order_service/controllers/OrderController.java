@@ -4,17 +4,15 @@ import com.example.ecomerce.order_service.dtos.OrderRequestDto;
 import com.example.ecomerce.order_service.dtos.OrderRequestItemDto;
 import com.example.ecomerce.order_service.services.OrderService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/orders")
+@RequestMapping("/core")
 public class OrderController {
 
     private final OrderService orderService;
@@ -22,6 +20,12 @@ public class OrderController {
     @GetMapping("/hello")
     public String hello(){
         return "Hello from orders";
+    }
+
+    @PostMapping("/createOrder")
+    public ResponseEntity<OrderRequestDto> createOrder(@RequestBody OrderRequestDto orderRequestDto){
+        OrderRequestDto orderRequestDto1 = orderService.createOrder(orderRequestDto);
+        return new ResponseEntity<>(orderRequestDto1, HttpStatus.CREATED);
     }
 
     @GetMapping

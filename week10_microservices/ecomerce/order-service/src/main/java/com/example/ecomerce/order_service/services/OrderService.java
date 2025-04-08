@@ -1,13 +1,17 @@
 package com.example.ecomerce.order_service.services;
 
+import com.example.ecomerce.order_service.clients.InventoryFeignClient;
 import com.example.ecomerce.order_service.dtos.OrderRequestDto;
 import com.example.ecomerce.order_service.dtos.OrderRequestItemDto;
+import com.example.ecomerce.order_service.entites.OrderItem;
+import com.example.ecomerce.order_service.entites.OrderStatus;
 import com.example.ecomerce.order_service.entites.Orders;
 import com.example.ecomerce.order_service.repositories.OrdersRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,7 +22,7 @@ import java.util.stream.Collectors;
 public class OrderService {
     private final OrdersRepository ordersRepository;
     private final ModelMapper modelMapper;
-
+    private final InventoryFeignClient inventoryFeignClient;
 
     public List<OrderRequestDto> getAllOrders(){
         log.info("Fetching all orders");
@@ -28,7 +32,7 @@ public class OrderService {
             dto.setId(order.getId());
             dto.setTotalPrice(order.getTotalPrice());
 
-            List<OrderRequestItemDto> items = order.getOrderItem().stream().map(item -> {
+            List<OrderRequestItemDto> items = order.getOrderItems().stream().map(item -> {
                 OrderRequestItemDto itemDto = new OrderRequestItemDto();
                 itemDto.setId(item.getId());
                 itemDto.setProductId(item.getProductId());
@@ -36,7 +40,7 @@ public class OrderService {
                 return itemDto;
             }).collect(Collectors.toList());
 
-            dto.setItems(items);
+            dto.setOrderItems(items);
             return dto;
         }).toList();
     }
@@ -49,15 +53,32 @@ public class OrderService {
         dto.setId(orders.getId());
         dto.setTotalPrice(orders.getTotalPrice());
 
-        List<OrderRequestItemDto> items = orders.getOrderItem().stream().map(item -> {
+        List<OrderRequestItemDto> items = orders.getOrderItems().stream().map(item -> {
             OrderRequestItemDto itemDto = new OrderRequestItemDto();
             itemDto.setProductId(item.getProductId());
             itemDto.setQuantity(item.getQuantity());
             return itemDto;
         }).collect(Collectors.toList());
 
-        dto.setItems(items);
+        dto.setOrderItems(items);
 
         return dto;
+    }
+
+    @Transactional
+    public OrderRequestDto createOrder(OrderRequestDto orderRequestDto) {
+        log.info("creating the orderItem and order with given orderRequestDto.......");
+        double ordersPrice = inventoryFeignClient.reduceQuantity(orderRequestDto);
+
+        Orders orders = modelMapper.map(orderRequestDto,Orders.class);
+        for (OrderItem orderItem : orders.getOrderItems()){
+            orderItem.setOrder(orders);
+        }
+        orders.setTotalPrice(ordersPrice);
+        orders.setOrderStatus(OrderStatus.CONFIRMED);
+
+        Orders savedOrder = ordersRepository.save(orders);
+
+        return modelMapper.map(savedOrder , OrderRequestDto.class);
     }
 }

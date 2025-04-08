@@ -23,11 +23,8 @@ public class Orders {
     private OrderStatus orderStatus;
 
     @OneToMany(mappedBy = "order", cascade =CascadeType.ALL,orphanRemoval = true)
-    private List<OrderItem> orderItem;
+    private List<OrderItem> orderItems;
 
-    private BigDecimal totalPrice;
+    private Double totalPrice;
 
-    public Optional<Object> stream() {
-        return null;
-    }
 }
