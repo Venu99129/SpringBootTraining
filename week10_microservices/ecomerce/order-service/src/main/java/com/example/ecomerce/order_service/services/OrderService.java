@@ -7,6 +7,9 @@ import com.example.ecomerce.order_service.entites.OrderItem;
 import com.example.ecomerce.order_service.entites.OrderStatus;
 import com.example.ecomerce.order_service.entites.Orders;
 import com.example.ecomerce.order_service.repositories.OrdersRepository;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
+import io.github.resilience4j.retry.annotation.Retry;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -66,6 +69,9 @@ public class OrderService {
     }
 
     @Transactional
+//    @Retry(name = "inventoryRetry" , fallbackMethod = "createOrderFallBackMethod")
+    @RateLimiter(name = "inventoryRateLimiter", fallbackMethod = "createOrderRateLimiterFallBackMethod")
+    @CircuitBreaker(name = "inventoryCircuitBreaker", fallbackMethod = "createOrderFallBackMethod")
     public OrderRequestDto createOrder(OrderRequestDto orderRequestDto) {
         log.info("creating the orderItem and order with given orderRequestDto.......");
         double ordersPrice = inventoryFeignClient.reduceQuantity(orderRequestDto);
@@ -80,5 +86,14 @@ public class OrderService {
         Orders savedOrder = ordersRepository.save(orders);
 
         return modelMapper.map(savedOrder , OrderRequestDto.class);
+    }
+
+    public OrderRequestDto createOrderFallBackMethod(OrderRequestDto orderRequestDto , Throwable throwable){
+        log.error("Fallback occurred due to : {}",throwable.getLocalizedMessage());
+        return new OrderRequestDto();
+    }
+    public OrderRequestDto createOrderRateLimiterFallBackMethod(OrderRequestDto orderRequestDto , Throwable throwable){
+        log.error("Fallback occurred due rate limiter to : {}",throwable.getLocalizedMessage());
+        return new OrderRequestDto();
     }
 }
