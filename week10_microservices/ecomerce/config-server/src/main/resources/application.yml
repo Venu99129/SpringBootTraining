@@ -8,7 +8,7 @@ spring:
         git:
           uri: https://github.com/Venu99129/spring-config-server
           username: Venu99129
-          password: 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
+          password: ..............
           default-label: main
 
 server:
