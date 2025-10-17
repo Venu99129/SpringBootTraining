@@ -3,34 +3,6 @@ spring:
     name: api-gateway
 
 
-#api gateway config
 
-  cloud:
-    gateway:
-      routes:
-        - id: order-service
-          uri: lb://ORDER-SERVICE
-          predicates:
-           - Path=/api/v1/orders/**
-          filters:
-            - StripPrefix=2
-            - name: loggingOrderFilter
-        - id: inventory-service
-          uri: lb://INVENTORY-SERVICE
-          predicates:
-            - Path=/api/v1/inventory/**
-          filters:
-            - StripPrefix=2
-
-
-
-#eureka config
-eureka:
-  client:
-    server-url:
-      defaultZone: http://localhost:8761/eureka
-
-
-  instance:
-    prefer-ip-address: true
-
+  config:
+    import: configserver:http://localhost:8888

@@ -1,0 +1,43 @@
+2025-09-15 21:48:39.598 INFO  c.w.p.ProductReadyFeaturesApplication - Starting ProductReadyFeaturesApplication using Java 23.0.1 with PID 476 (C:\Users\venum\springBoot\springBootTraining\week4_productionReady_features\productReadyFeatures\target\classes started by venum in C:\Users\venum\springBoot\springBootTraining\week4_productionReady_features\productReadyFeatures)
+2025-09-15 21:48:39.606 INFO  c.w.p.ProductReadyFeaturesApplication - No active profile set, falling back to 1 default profile: "default"
+2025-09-15 21:48:39.707 INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2025-09-15 21:48:39.707 INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2025-09-15 21:48:41.153 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-09-15 21:48:41.210 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 51 ms. Found 1 JPA repository interface.
+2025-09-15 21:48:42.467 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 9000 (http)
+2025-09-15 21:48:42.507 INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-9000"]
+2025-09-15 21:48:42.509 INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-09-15 21:48:42.509 INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.34]
+2025-09-15 21:48:42.622 INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2025-09-15 21:48:42.622 INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2915 ms
+2025-09-15 21:48:43.241 INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-09-15 21:48:43.342 INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.4.Final
+2025-09-15 21:48:43.402 INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2025-09-15 21:48:43.588 INFO  o.h.e.b.internal.EnversServiceImpl - Envers integration enabled? : true
+2025-09-15 21:48:43.825 INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-09-15 21:48:43.858 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2025-09-15 21:48:44.109 INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@4ed61a71
+2025-09-15 21:48:44.112 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2025-09-15 21:48:44.228 INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 8.0.40
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-09-15 21:48:45.177 INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-09-15 21:48:45.248 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-09-15 21:48:46.275 WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-09-15 21:48:46.382 INFO  o.s.v.b.OptionalValidatorFactoryBean - Failed to set up a Bean Validation provider: jakarta.validation.NoProviderFoundException: Unable to create a Configuration, because no Jakarta Bean Validation provider could be found. Add a provider like Hibernate Validator (RI) to your classpath.
+2025-09-15 21:48:47.547 INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2025-09-15 21:48:47.563 INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 15 endpoints beneath base path '/actuator'
+2025-09-15 21:48:47.678 INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-9000"]
+2025-09-15 21:48:47.695 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 9000 (http) with context path '/'
+2025-09-15 21:48:47.710 INFO  c.w.p.ProductReadyFeaturesApplication - Started ProductReadyFeaturesApplication in 8.824 seconds (process running for 10.813)
+2025-09-15 21:54:21.750 INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-09-15 21:54:21.750 INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2025-09-15 21:54:21.757 INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 7 ms
+2025-09-15 21:54:22.105 WARN  o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [org.springframework.web.servlet.resource.NoResourceFoundException: No static resource favicon.ico.]
+2025-09-15 21:54:42.834 WARN  o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [org.springframework.web.servlet.resource.NoResourceFoundException: No static resource favicon.ico.]
+2025-09-15 21:57:46.866 WARN  o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [org.springframework.web.servlet.resource.NoResourceFoundException: No static resource .]

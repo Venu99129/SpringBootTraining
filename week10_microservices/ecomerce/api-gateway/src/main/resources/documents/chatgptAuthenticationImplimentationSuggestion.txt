@@ -232,3 +232,42 @@ Reason
 
 
 ChatGPT can
+
+
+To deserialize userJson (a JSON string) back into a Java object (like ValidUserResponseDto), you can use Jackson — which is already bundled with Spring Boot. Here's how to do it:
+
+✅ Step-by-step example using Jackson:
+java
+Copy
+Edit
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+ObjectMapper objectMapper = new ObjectMapper();
+
+try {
+    ValidUserResponseDto userDto = objectMapper.readValue(userJson, ValidUserResponseDto.class);
+} catch (Exception e) {
+    // handle error
+    e.printStackTrace();
+}
+🔄 If you’re inside a Spring-managed bean
+You can even inject ObjectMapper:
+
+java
+Copy
+Edit
+@Autowired
+private ObjectMapper objectMapper;
+Then use:
+
+java
+Copy
+Edit
+ValidUserResponseDto userDto = objectMapper.readValue(userJson, ValidUserResponseDto.class);
+Just make sure:
+
+userJson is a valid JSON string.
+
+ValidUserResponseDto has proper getters, setters, and a no-arg constructor.
+
+Let me know if you want to include this in a filter or controller, I can show you a ready-made snippet.

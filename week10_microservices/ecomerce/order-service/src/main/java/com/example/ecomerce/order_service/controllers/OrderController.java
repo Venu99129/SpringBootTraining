@@ -2,8 +2,13 @@ package com.example.ecomerce.order_service.controllers;
 
 import com.example.ecomerce.order_service.dtos.OrderRequestDto;
 import com.example.ecomerce.order_service.dtos.OrderRequestItemDto;
+import com.example.ecomerce.order_service.dtos.ValidUserResponseDto;
 import com.example.ecomerce.order_service.services.OrderService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,10 +21,16 @@ import java.util.List;
 public class OrderController {
 
     private final OrderService orderService;
+    private final ObjectMapper objectMapper;
+
+    @Value("${my.veriable}")
+    private String veriable;
 
     @GetMapping("/hello")
-    public String hello(){
-        return "Hello from orders";
+    public String hello(HttpServletRequest request) throws JsonProcessingException {
+        String userInfo = request.getHeader("CurrentUser");
+        ValidUserResponseDto userDto = objectMapper.readValue(userInfo, ValidUserResponseDto.class);
+        return userDto.toString()+"\nHello from orders \n"+veriable;
     }
 
     @PostMapping("/createOrder")

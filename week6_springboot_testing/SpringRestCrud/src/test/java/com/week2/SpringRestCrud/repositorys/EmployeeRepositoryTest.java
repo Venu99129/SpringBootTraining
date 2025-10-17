@@ -16,8 +16,8 @@ import java.util.List;
 
 
 //@SpringBootTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@Import(TestContainerConfiguration.class)
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.ANY)
+//@Import(TestContainerConfiguration.class)
 @DataJpaTest
 class EmployeeRepositoryTest {
 
