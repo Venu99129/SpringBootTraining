@@ -6,10 +6,7 @@ spring:
     config:
       server:
         git:
-          uri: https://github.com/Venu99129/spring-config-server
-          username: Venu99129
-          password: ..............
-          default-label: main
+
 
 server:
   port: 8888
