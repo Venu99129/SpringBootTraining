@@ -1,5 +1,8 @@
 package com.example.auth_service.config;
 
+import feign.Capability;
+import feign.micrometer.MicrometerCapability;
+import io.micrometer.core.instrument.MeterRegistry;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,5 +19,10 @@ public class appConfig {
     @Bean
     PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public Capability capability(MeterRegistry meterRegistry) {
+        return new MicrometerCapability(meterRegistry);
     }
 }
