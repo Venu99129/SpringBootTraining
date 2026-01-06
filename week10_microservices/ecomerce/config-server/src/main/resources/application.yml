@@ -2,7 +2,14 @@ spring:
   application:
     name: config-server
 
-
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/Venu99129/spring-config-server
+          username: ${GITHUB_USERNAME}
+          password: ${GITHUB_TOKEN}
+          default-label: main
 server:
   port: 8888
 
